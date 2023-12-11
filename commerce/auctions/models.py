@@ -4,3 +4,45 @@ from django.db import models
 
 class User(AbstractUser):
     pass
+
+class AuctionListing(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    seller_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
+    start_bid = models.DecimalField(max_digits=10, decimal_places=2)
+    current_bid = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    category = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    sold = models.BooleanField(default=False)
+    current_owner_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='owned_listings')
+    
+    def __str__(self):
+        return 'title: {}, seller: {}, current_price: {}'.format(self.title, self.seller, self.current_bid)
+
+    
+class Bid (models.Model):
+    bidder_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_bids')
+    bid_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    bid_date = models.DateTimeField(auto_now_add=True)
+    product_id = models.ForeingKey(AuctionListing, on_delete=models.CASCADE, related_name='product_bids')
+    
+    def __str__(self):
+        return 'bidder_id: {}, bid_amount: {}, bid_date: {}, product_id: {}'.format(self.bidder_id, self.bid_amount, self.bid_date, self.product_id)
+    
+
+class Comment(models.Model):
+    comment = models.TextField()
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_commnets')
+    comment_date = models.DateTimeField(auto_now_add=True)
+    product_id = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_comments')
+
+    def __str__(self):
+        return 'comment: {}, commenter: {}, comment_date: {}, product_id: {}'.format(self.comment, self.commenter, self.comment_date, self.product_id)
+    
+    
+class Watchlist(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_watchlist')
+    product_id = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_watchlist')
+    
+    def __str__(self):
+        return 'user_id: {}, product_id: {}'.format(self.user_id, self.product_id)
