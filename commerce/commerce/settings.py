@@ -120,3 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Some necessary configuration lines to setup url for django to enable him to store images on a filesystem and be able to store there paths in the database
+
