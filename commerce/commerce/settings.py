@@ -124,3 +124,5 @@ STATIC_URL = '/static/'
 
 # Some necessary configuration lines to setup url for django to enable him to store images on a filesystem and be able to store there paths in the database
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

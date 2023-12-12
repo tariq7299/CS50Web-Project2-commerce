@@ -3,8 +3,10 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from .forms import NewListingForm
+from django.contrib import messages
 
-from .models import User
+from .models import User, AuctionListing, Bid, Comment, Watchlist
 
 
 def index(request):
@@ -61,3 +63,47 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+
+    
+def create_listing(request):
+    
+    if request.user.is_authenticated:
+        if request.method == "POST" and request.user:
+            
+            username = request.user.username
+            
+            # Get the user id from the database that matches the username of the current user
+            user_id = User.objects.get(username=username).id
+            print()
+            form = NewListingForm(request.POST)
+            
+            if form.is_valid():
+                
+                title = form.cleaned_data['title']
+                description = form.cleaned_data['description']
+                starting_bid = form.cleaned_data['starting_bid']
+                image = form.cleaned_data['image']
+                category = form.cleaned_data['category']
+                
+                new_listing = AuctionListing(title=title, description=description, seller_id=user_id, start_bid=starting_bid, current_bid=starting_bid, category=category, current_owner_id=user_id, image=image)
+                
+                new_listing.save()
+                
+                return HttpResponseRedirect(reverse("index"))
+            
+        else:
+            return render(request, "auctions/create_listing.html", {'form': NewListingForm()})
+    else:
+        messages.add_message(request, messages.ERROR, "Please log in first!")
+        return HttpResponseRedirect(reverse("login"))
+    
+    
+    
+    
+    
+    
+    
+    
+    

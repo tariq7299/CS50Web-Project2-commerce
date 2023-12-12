@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+# from Pillow import ImageField
 
 class User(AbstractUser):
     pass
@@ -8,15 +8,14 @@ class User(AbstractUser):
 class AuctionListing(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    seller_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
     start_bid = models.DecimalField(max_digits=10, decimal_places=2)
     current_bid = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     category = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     sold = models.BooleanField(default=False)
-    current_owner_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='owned_listings')
-    image = models.ImageField(upload_to='images/')
-    
+    current_owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='owned_listings')
+    image = models.ImageField(upload_to='images/', default='default.jpg')
     def __str__(self):
         return 'title: {}, seller: {}, current_price: {}'.format(self.title, self.seller, self.current_bid)
 
