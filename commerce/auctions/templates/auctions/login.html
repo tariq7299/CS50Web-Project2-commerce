@@ -8,6 +8,7 @@
         <div>{{ message }}</div>
     {% endif %}
 
+
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <div class="form-group">

@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
+    'sass_processor',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,25 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Some configurations to enable sass
+
+STATICFILES_FINDERS = [
+    # other finders
+    'compressor.finders.CompressorFinder',
+    'sass_processor.finders.CssFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+]
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'sass_processor.processor.LibSassProcessor'),
+)
+
+SASS_PROCESSOR_ENABLED = True
+SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
+
+COMPRESS_ENABLED = True
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+

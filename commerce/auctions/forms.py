@@ -1,4 +1,5 @@
 from django import forms
+from .models import AuctionListing
 
 class NewListingForm(forms.Form):
     title = forms.CharField(max_length=100)

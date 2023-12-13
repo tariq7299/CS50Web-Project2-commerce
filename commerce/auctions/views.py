@@ -77,14 +77,17 @@ def create_listing(request):
             # Get the user id from the database that matches the username of the current user
             user_id = User.objects.get(username=username).id
             print()
-            form = NewListingForm(request.POST)
+            form = NewListingForm(request.POST, request.FILES) 
             
             if form.is_valid():
-                
+                print(form.is_valid())
                 title = form.cleaned_data['title']
+                print('title', title)
                 description = form.cleaned_data['description']
+                print('descriptioin', description)
                 starting_bid = form.cleaned_data['starting_bid']
                 image = form.cleaned_data['image']
+                print('image', image)
                 category = form.cleaned_data['category']
                 
                 new_listing = AuctionListing(title=title, description=description, seller_id=user_id, start_bid=starting_bid, current_bid=starting_bid, category=category, current_owner_id=user_id, image=image)
