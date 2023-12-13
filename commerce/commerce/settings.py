@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor',
     'sass_processor',
+    'livereload',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'commerce.urls'
@@ -150,3 +152,5 @@ COMPRESS_ENABLED = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+#Configuration to make my project start and refrash every time I make a change
+LIVERELOAD_PORT = 35729
