@@ -1,11 +1,10 @@
 {% extends "auctions/layout.html" %}
 
-{% load static %}
 {% load sass_tags %}
 
-
 {% block scss %}
-    <link rel="stylesheet" type="text/css" href="{% sass_src 'auctions/create-listing.scss' %}">{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'auctions/create-listing.scss' %}">
+{% endblock %}
 
 {% block title %}
     Create listing
