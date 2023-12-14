@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import AuctionListing, Bid, Comment, Watchlist
+from .models import AuctionListing, Bid, Comment, Watchlist, User
 
 # Register your models here.
+admin.site.register(User)
 admin.site.register(AuctionListing)
 admin.site.register(Bid)
 admin.site.register(Comment)
