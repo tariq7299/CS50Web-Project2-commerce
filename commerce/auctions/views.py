@@ -10,7 +10,14 @@ from .models import User, AuctionListing, Bid, Comment, Watchlist
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    # Get all rows from AuctionListing model where sold column is False
+    listings = AuctionListing.objects.filter(sold=False)
+
+    # Render 'auctions/index.html' with a variable holding all the rows extracted from the database
+    print('listings', listings)
+    [print('listings.img', listing.image) for listing in listings ]
+    
+    return render(request, 'auctions/index.html', {'listings': listings})
 
 
 def login_view(request):

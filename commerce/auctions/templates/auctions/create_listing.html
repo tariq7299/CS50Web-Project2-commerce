@@ -1,21 +1,18 @@
 {% extends "auctions/layout.html" %}
 
 {% load static %}
-{% load compress %}
+{% load sass_tags %}
 
 
 {% block scss %}
-    {% compress css %}
-        <link rel="stylesheet" type="text/css" href="{% static 'auctions/create-listing.scss' %}">
-    {% endcompress %}
-{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'auctions/create-listing.scss' %}">{% endblock %}
 
 {% block title %}
     Create listing
 {% endblock%}
 
 {% block body %}
-    <h2>Create New Listing</h2>
+    <h2 class="page-title">Create New Listing</h2>
     <div class="newlisting-form-wrapper">
         <form method="POST" action="{% url 'create_listing' %}" enctype="multipart/form-data">
             {% csrf_token %}

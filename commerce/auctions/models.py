@@ -15,7 +15,7 @@ class AuctionListing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     sold = models.BooleanField(default=False)
     current_owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='owned_listings')
-    image = models.ImageField(upload_to='images/', default='default.jpg')
+    image = models.ImageField(upload_to='auctions/images/', default='auctions/images/default.jpg')
     def __str__(self):
         return 'title: {}, seller: {}, current_price: {}'.format(self.title, self.seller, self.current_bid)
 

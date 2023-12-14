@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'compressor',
     'sass_processor',
     'livereload',
+    'django_browser_reload',
+    
 ]
 
 MIDDLEWARE = [
@@ -134,23 +135,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Some configurations to enable sass
 
 STATICFILES_FINDERS = [
-    # other finders
-    'compressor.finders.CompressorFinder',
     'sass_processor.finders.CssFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'sass_processor.processor.LibSassProcessor'),
-)
-
 SASS_PROCESSOR_ENABLED = True
 SASS_PROCESSOR_ROOT = os.path.join(BASE_DIR, 'static')
-
-COMPRESS_ENABLED = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 #Configuration to make my project start and refrash every time I make a change
 LIVERELOAD_PORT = 35729
+
+BROWSER_RELOAD_SCSS_DIRS = [
+    SASS_PROCESSOR_ROOT,
+]
