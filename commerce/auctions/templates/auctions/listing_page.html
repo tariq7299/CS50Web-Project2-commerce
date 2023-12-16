@@ -1,0 +1,54 @@
+{% extends "auctions/layout.html" %}
+{% load sass_tags %}
+{% load static %}
+
+{% block title %}
+    Listing: {{ listing.title }} 
+{% endblock %}
+
+{% block scss %}
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'auctions/listing_page.scss' %}">
+{% endblock %}
+
+{% block body %}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src={% static 'auctions/listing_page.js' %}></script>
+
+    <h1>Listing: {{ listing.title }} </h1>
+    {% if product_belong_to_current_user %}
+
+    <div id="by-me-button">By me</div>
+
+    {% else%}
+
+        {%if found_in_watchlist %}
+            <button id="watchlist-button" data-listing-id="{{ listing.id }}" class="added-to-watchlist">Added to Watchlist</button>
+        {% else %}
+            <button id="watchlist-button" data-listing-id="{{ listing.id }}" class="not-added-to-watchlist">Add to Watchlist</button>
+        {% endif %}
+
+    {% endif %}
+    <div class="product-image-wrapper">
+        <img src="{{ listing.image.url }}">
+    </div>
+    <p>{{ listing.description }}</p>
+    <h2>${{ listing.current_bid }}</h2>
+    {% comment %} Some js to change the price in real time {% endcomment %}
+    <form method="" action="">
+        {{ form }}
+    </form>
+    {% comment %}  Finish this to be able to clode auction {% endcomment %}
+    <form method="POST" action="{% url 'my_view' id %}">
+        {% csrf_token %}
+        <input type="hidden" name="_method" value="PUT">
+        <button type="submit">Update</button>
+    </form>
+    <h3>Details</h3>
+    <ul>
+        <li>Added on: {{ listing.created_at }}</li>
+        <li>Listed by: {{ listing.seller }}</li>
+        <li>Category: {{ listing.category }}</li>
+        <li>Original Price: {{ listing.start_bid }}</li>
+    </ul>
+{% endblock %}

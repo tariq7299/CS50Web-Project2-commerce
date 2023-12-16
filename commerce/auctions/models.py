@@ -28,10 +28,10 @@ class AuctionListing(models.Model):
 
     
 class Bid(models.Model):
-    bidder_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_bids')
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_bids')
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2)
     bid_date = models.DateTimeField(auto_now_add=True)
-    product_id = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_bids')
+    product = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_bids')
     
     def __str__(self):
         return 'bidder_id: {}, bid_amount: {}, bid_date: {}, product_id: {}'.format(self.bidder_id, self.bid_amount, self.bid_date, self.product_id)
@@ -48,8 +48,11 @@ class Comment(models.Model):
     
     
 class Watchlist(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_watchlist')
-    product_id = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_watchlist')
-    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_watchlist')
+    product = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_watchlist')
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'product'], name='unique_watchlist')
+        ]
     def __str__(self):
         return 'user_id: {}, product_id: {}'.format(self.user_id, self.product_id)

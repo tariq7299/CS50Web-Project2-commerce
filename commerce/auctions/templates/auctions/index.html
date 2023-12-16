@@ -1,6 +1,10 @@
 {% extends "auctions/layout.html" %}
 {% load sass_tags %}
 
+{% block title %}
+    Active Listing
+{% endblock %}
+
 {% block scss %}
     <link rel="stylesheet" type="text/css" href="{% sass_src 'auctions/index.scss' %}">
 {% endblock %}
@@ -9,7 +13,7 @@
     <h2>Active Listings</h2>
 
     {% for listing in listings %}
-        <div class="listing-wrapper" id={{ listing.id }}>
+        <a href="{% url 'listing_page' listing.id %}"><div class="listing-wrapper" id={{ listing.id }}>
 
             <div class="listing-img-wrapper">
                 <img class="" src='{{ listing.image.url }}'>
@@ -21,6 +25,7 @@
                 <p class='created-at'>{{ listing.created_at }}</p>
             </div>
         </div>
+    </a>
     {% endfor %}
 
 
