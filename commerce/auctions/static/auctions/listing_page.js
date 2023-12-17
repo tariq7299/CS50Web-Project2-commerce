@@ -21,38 +21,41 @@ document.addEventListener('DOMContentLoaded', function() {
     const csrftoken = getCookie('csrftoken')
     
     let watchlistButton = document.getElementById('watchlist-button');
-    watchlistButton.addEventListener('click', function() {
-        let listingId = this.getAttribute('data-listing-id');
-        const request = new Request(
-            'add-to-watchlist',
-            {
-                method: 'POST',
-                headers: {'X-CSRFToken': csrftoken},
-                mode: 'same-origin', 
-                body: JSON.stringify({  
-                    'listing_id': listingId,
-                }),
-            }
-        );
-        fetch(request)
-            .then(response => response.json())  
-            .then(data => {
-                if (data.status === 'added') {
-                    this.className = "added-to-watchlist";
-                    this.textContent = "Added to watchlist";
+
+    if (watchlistButton != null) {
+        watchlistButton.addEventListener('click', function() {
+            let listingId = this.getAttribute('data-listing-id');
+            const request = new Request(
+                'watchlist',
+                {
+                    method: 'POST',
+                    headers: {'X-CSRFToken': csrftoken},
+                    mode: 'same-origin', 
+                    body: JSON.stringify({  
+                        'listing_id': listingId,
+                    }),
                 }
-                else if (data.status === 'removed') {
-                    this.className = "not-added-to-watchlist";  
-                    this.textContent = "Add to watchlist"
-                } else {
-                    console.log(data.error_message)
-                    console.log('Error!');
-                }
-            })
-            .catch(error => {
-                console.log('Request failed', error);
-            });
-    });
-    
+            );
+            fetch(request)
+                .then(response => response.json())  
+                .then(data => {
+                    if (data.status === 'added') {
+                        this.className = "added-to-watchlist";
+                        this.textContent = "Added to watchlist";
+                    }
+                    else if (data.status === 'removed') {
+                        this.className = "not-added-to-watchlist";  
+                        this.textContent = "Add to watchlist"
+                    } else {
+                        console.log(data.error_message)
+                        console.log('Error!');
+                    }
+                })
+                .catch(error => {
+                    console.log('Request failed', error);
+                });
+        });
+    }
+
 });
 

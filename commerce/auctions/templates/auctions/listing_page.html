@@ -15,40 +15,89 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src={% static 'auctions/listing_page.js' %}></script>
 
-    <h1>Listing: {{ listing.title }} </h1>
+    {% if listing.sold %}
+        <p>{{ closed_auction_msg }}</p>
+    {%endif%}
+
+    <h1 class="bold">Listing: {{ listing.title }} </h1>
+
     {% if product_belong_to_current_user %}
 
-    <div id="by-me-button">By me</div>
+        <div id="by-me-button">By me</div>
+
 
     {% else%}
 
         {%if found_in_watchlist %}
-            <button id="watchlist-button" data-listing-id="{{ listing.id }}" class="added-to-watchlist">Added to Watchlist</button>
+            <button id="watchlist-button" data-listing-id="{{ listing.id }}" class="added-to-watchlist" {%if listing.sold%}disabled{%endif%}>Added to Watchlist</button>
         {% else %}
-            <button id="watchlist-button" data-listing-id="{{ listing.id }}" class="not-added-to-watchlist">Add to Watchlist</button>
+            <button id="watchlist-button" data-listing-id="{{ listing.id }}" class="not-added-to-watchlist" {%if listing.sold%}disabled{%endif%} >Add to Watchlist</button>
         {% endif %}
 
     {% endif %}
+
     <div class="product-image-wrapper">
         <img src="{{ listing.image.url }}">
     </div>
-    <p>{{ listing.description }}</p>
-    <h2>${{ listing.current_bid }}</h2>
-    {% comment %} Some js to change the price in real time {% endcomment %}
-    <form method="" action="">
-        {{ form }}
-    </form>
-    {% comment %}  Finish this to be able to clode auction {% endcomment %}
-    <form method="POST" action="{% url 'my_view' id %}">
-        {% csrf_token %}
-        <input type="hidden" name="_method" value="PUT">
-        <button type="submit">Update</button>
-    </form>
-    <h3>Details</h3>
-    <ul>
+
+    <p class="listing-description">{{ listing.description }}</p>
+
+    <h2 class="bold listing-current-bid">${{ listing.current_bid }}</h2>
+
+    {% if product_belong_to_current_user and not listing.sold %}
+        <form method="POST" action="{% url 'listing_page' listing.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="_method" value="PUT">
+            <button type="submit">Update</button>
+        </form>
+    {% elif not listing.sold %}
+        <p>{{ bid_msg }}</p>
+        <form method="POST" action="{% url 'listing_page' listing.id %}">
+            {% csrf_token %}
+            {{ bid_form }}
+            <input type="submit" value="Place Bid" class="bid-submit-button">
+        </form>
+    {% endif %}
+
+    <h3 class="bold listing-details">Details</h3>
+    <ul class="details-list">
         <li>Added on: {{ listing.created_at }}</li>
-        <li>Listed by: {{ listing.seller }}</li>
+        <li>Listed by:<span> {{ listing.seller }}</span></li>
         <li>Category: {{ listing.category }}</li>
         <li>Original Price: {{ listing.start_bid }}</li>
     </ul>
+    <div class="comment-section-wrapper">
+        <h3 class="bold">Comments</h3>
+
+        <div class="comments-row-wrapper">
+            <div class="comment-box">
+                <p>
+                    Lorem Ipsum
+                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
+                </p>
+            </div>
+            <div class="comment-box">
+                <p>
+                    Lorem Ipsum
+                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
+                </p>
+            </div>
+            <div class="comment-box">
+                <p>
+                    Lorem Ipsum
+                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="comment-box">
+        <p>
+            Lorem Ipsum
+            "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+            "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
+        </p>
+    </div>
 {% endblock %}

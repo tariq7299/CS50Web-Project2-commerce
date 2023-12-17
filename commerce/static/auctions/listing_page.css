@@ -1,3 +1,19 @@
+/* styles.css */
+/* Style for the container of error messages */
+ul.errorlist {
+  list-style: none;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #f00;
+  /* Border color for error messages */
+  background-color: #fee;
+  /* Background color for error messages */
+  border-radius: 5px;
+  margin-bottom: 5px; }
+  ul.errorlist li {
+    padding: 8px;
+    color: #f00; }
+
 #by-me-button {
   width: 60px;
   text-align: center;
@@ -33,5 +49,53 @@
     width: 100%;
     height: 100%;
     object-fit: contain; }
+
+.listing-description {
+  font-size: larger;
+  font-weight: 500;
+  padding: 10px; }
+
+.bold {
+  font-weight: 700; }
+
+.listing-current-bid {
+  padding: 10px 0; }
+
+.bid-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-weight: 700; }
+
+.bid-submit-button {
+  background-color: #003d89;
+  color: white;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  margin: 15px 0; }
+
+.listing-details {
+  margin-top: 15px; }
+
+ul.details-list li span {
+  color: blue; }
+
+.comment-section-wrapper {
+  width: 100%; }
+  .comment-section-wrapper .comments-row-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%; }
+    .comment-section-wrapper .comments-row-wrapper .comment-box {
+      overflow-y: scroll;
+      width: 150px;
+      height: 100px;
+      border: 1px solid black;
+      color: #45a049;
+      background-color: #003d89; }
 
 /*# sourceMappingURL=listing_page.css.map */
