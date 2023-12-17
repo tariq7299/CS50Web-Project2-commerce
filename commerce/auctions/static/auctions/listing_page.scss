@@ -115,24 +115,30 @@ ul.details-list li span {
     // display: flex;
     // flex-direction: column;
     
+    
     .comments-row-wrapper{
-        display: flex;
-        flex-direction: row;
-        gap: 20px;
+
+        border: 1px solid black;
+
+        display: block;
+        // flex-direction: row;
+        // gap: 20px;
 
         // max-width: ;
         // justify-content: center;
         // align-items: center;
 
-        // overflow-x: scroll;
+        overflow-x: scroll;
         width: 100%;
+        padding: 10px;
         .comment-box{
             // display: inline;
 
 
             overflow-y: scroll;
-            width: 150px;
-            height: 100px;
+            width: 350px;
+            height: 150px;
+            
             border: 1px solid black;
             color: #45a049;
             background-color: #003d89;
