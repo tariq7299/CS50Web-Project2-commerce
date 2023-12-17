@@ -87,11 +87,11 @@ ul.details-list li span {
   width: 100%; }
   .comment-section-wrapper .comments-row-wrapper {
     border: 1px solid black;
-    display: block;
     overflow-x: scroll;
     width: 100%;
     padding: 10px; }
     .comment-section-wrapper .comments-row-wrapper .comment-box {
+      display: inline;
       overflow-y: scroll;
       width: 350px;
       height: 150px;

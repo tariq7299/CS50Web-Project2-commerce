@@ -120,7 +120,7 @@ ul.details-list li span {
 
         border: 1px solid black;
 
-        display: block;
+        // display: block;
         // flex-direction: row;
         // gap: 20px;
 
@@ -132,7 +132,7 @@ ul.details-list li span {
         width: 100%;
         padding: 10px;
         .comment-box{
-            // display: inline;
+            display: inline;
 
 
             overflow-y: scroll;
