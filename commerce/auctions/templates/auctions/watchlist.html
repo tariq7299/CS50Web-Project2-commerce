@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+{% load sass_tags %}
+
+{% block title %}
+    Watchlist
+{% endblock %}
+
+{% block scss %}
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'auctions/watchlist.scss' %}">
+{% endblock %}
+
+{% block body %}
+    <h2>Watchlist</h2>
+    {% if not watchlists %}
+        No listings Added to your watchlist ! Add some listings to watchlist and come back.
+    {% else %}
+    
+    {% endif %}
+    {% for watchlist in watchlists %}
+        <a href="{% url 'listing_page' watchlist.product.id %}">
+            <div class="listing-wrapper" id={{ watchlist.product.id }}>
+                <div class="listing-img-wrapper">
+                    <img class="" src='{{ watchlist.product.image.url }}'>
+                </div>
+                <div class="listing-details-wrapper">
+                    <h3 class='title'>{{ watchlist.product.title }}</h3>
+                    <h4 class='current-bid'><b>Price: </b>${{ watchlist.product.current_bid }}</h4>
+                    <h5 class='description'>{{ watchlist.product.description }}</h5>
+                    <p class='created-at'>{{ watchlist.product.created_at }}</p>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+
+
+{% endblock %}

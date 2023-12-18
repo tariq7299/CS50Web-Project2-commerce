@@ -71,7 +71,7 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
-
+  
   
 def create_listing(request):
     
@@ -263,3 +263,23 @@ def add_remove_to_watchlist(request):
         return JsonResponse({'status': 'error', 'error_message': error_message})
     
     
+def watchlist(request):
+    
+    user_id = User.objects.get(username=request.user.username).id
+    watchlists = Watchlist.objects.filter(user=user_id)
+    
+    # if not watchlists:
+    #     return HttpResponse("no watch")
+        
+    return render(request, "auctions/watchlist.html", {'watchlists': watchlists})
+
+
+def get_categories(request):
+    categories=['Fashion', 'Toys', 'Electronics', 'Home', 'Clothing', 'Shoes', 'Furniture and Decor', 'Food and Beverage']
+    return render(request, "auctions/categories.html", {'categories': categories})
+
+
+def get_listing_in_a_category(request, category):
+    listings_in_category = AuctionListing.objects.filter(category=category)
+    print('listings_in_category', listings_in_category)
+    return render(request, "auctions/listings_in_a_category.html", {'listings_in_category': listings_in_category})

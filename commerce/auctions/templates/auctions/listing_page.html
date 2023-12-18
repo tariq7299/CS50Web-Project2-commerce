@@ -77,7 +77,7 @@
                     </div>
                     <div class="comment-text-wrapper">
                         <div class="username-and-date">
-                            <p class="commentor-username"><span class="blue">teka</span></p>
+                            <p class="commentor-username"><span class="blue">{{ user.username }}</span></p>
                         </div>
                         <form method="POST" action="{% url 'listing_page' listing.id %}">
                             {% csrf_token %}
