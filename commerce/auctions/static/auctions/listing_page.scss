@@ -4,8 +4,9 @@
 
 /* Style for the container of error messages */
 ul.errorlist {
+    width: 30%;
     list-style: none;
-    padding: 10px;
+    // padding: 6px;
     margin: 10px 0;
     border: 1px solid #f00; /* Border color for error messages */
     background-color: #fee; /* Background color for error messages */
@@ -13,23 +14,42 @@ ul.errorlist {
     margin-bottom: 5px;
     li {
 
-        padding: 8px;
+        padding: 5px;
+
+
+
+
+
+
         color: #f00;
     }
 
 }
 
-#by-me-button {
-    width: 60px;
-    text-align: center;
+#tag {
 
-
-    background-color: #45a049;
-    border: none;
+    padding: 0 5px;
+    color: white;
+    width: fit-content;
     font-weight: bold;
     border-radius: 6px;
     margin: 20px 0px;
-    color: #fff;
+}
+
+.green-tag {
+    background-color: #45a049;
+
+}
+.red-tag {
+    background-color: red;
+
+}
+
+.big-notifiction{
+    font-size: x-large;
+    p {
+        padding: 10px;
+    }
 }
 
 #watchlist-button {
@@ -90,7 +110,6 @@ ul.errorlist {
     font-weight: 700;
 }
 
-
 .bid-submit-button {
     background-color: #003d89;
     color: white;
@@ -101,48 +120,106 @@ ul.errorlist {
     margin: 15px 0;
 }
 
+.close-auction-button{
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    padding: 10px 30px;
+    border-radius: 5px;
+    font-size: larger;
+    font-weight: 500;
+
+
+
+
+    border: none;
+}
 
 .listing-details {
     margin-top: 15px;
 }
 
-ul.details-list li span {
+.blue {
     color: blue;
 }
 
 .comment-section-wrapper{
     width: 100%;
-    // display: flex;
-    // flex-direction: column;
-    
     
     .comments-row-wrapper{
-
-        border: 1px solid black;
-
-        // display: block;
-        // flex-direction: row;
-        // gap: 20px;
-
-        // max-width: ;
-        // justify-content: center;
-        // align-items: center;
-
-        overflow-x: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
         width: 100%;
         padding: 10px;
+
         .comment-box{
-            display: inline;
+            display: flex;
+            flex-direction: row;
+
+            .profile-photo-wrapper{
+                flex-basis: 60px;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: start;
+
+                img{
+                    margin-top: -5px;
+                    width: 100%;
+                    height: auto;
+
+                }
+            }
+
+            .comment-text-wrapper{
+
+                flex-grow: 1;
+                max-width: 1200px;
+
+                .comment-input {
+                    width: 100%;
+                    padding: 10px;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                    font-weight: 700;
+                    height: 100px;
+                }
+
+                .comment-submit-button{
+
+                    background-color: #003d89;
+                    color: white;
+                    cursor: pointer;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    border: none;
+
+                }
 
 
-            overflow-y: scroll;
-            width: 350px;
-            height: 150px;
-            
-            border: 1px solid black;
-            color: #45a049;
-            background-color: #003d89;
+                p {
+                    margin: 0px;
+                    padding: 0px;
+                }
 
+                
+                .username-and-date {
+                    display: flex;
+                    flex-flow: row nowrap;
+                    justify-content: space-between;
+
+                    p:first-child {
+                        font-size: larger;
+                        font-weight: 500;
+                    }
+                    p:nth-child(2) {
+                        font-weight: 500;
+                    }
+
+                }
+
+            }
 
         }
 

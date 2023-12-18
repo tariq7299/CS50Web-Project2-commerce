@@ -41,10 +41,10 @@ class Comment(models.Model):
     comment = models.TextField()
     commenter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_commnets')
     comment_date = models.DateTimeField(auto_now_add=True)
-    product_id = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_comments')
+    product = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name='product_comments')
 
     def __str__(self):
-        return 'comment: {}, commenter: {}, comment_date: {}, product_id: {}'.format(self.comment, self.commenter, self.comment_date, self.product_id)
+        return 'comment: {}, commenter: {}, comment_date: {}, product_id: {}'.format(self.comment, self.commenter, self.comment_date, self.product)
     
     
 class Watchlist(models.Model):

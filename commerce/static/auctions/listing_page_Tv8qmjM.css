@@ -1,0 +1,148 @@
+/* styles.css */
+/* Style for the container of error messages */
+ul.errorlist {
+  list-style: none;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #f00;
+  /* Border color for error messages */
+  background-color: #fee;
+  /* Background color for error messages */
+  border-radius: 5px;
+  margin-bottom: 5px; }
+  ul.errorlist li {
+    padding: 8px;
+    color: #f00; }
+
+#tag {
+  width: 100%;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  margin: 20px 0px;
+  color: #fff; }
+  #tag p {
+    background-color: #45a049;
+    width: 40px; }
+
+#watchlist-button {
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  margin: 20px 0px;
+  color: #fff; }
+
+.not-added-to-watchlist {
+  background-color: #666666; }
+  .not-added-to-watchlist:hover {
+    background-color: #003d89; }
+
+.added-to-watchlist {
+  background-color: #45a049; }
+  .added-to-watchlist:hover {
+    background-color: #333333; }
+
+.product-image-wrapper {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto; }
+  .product-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; }
+
+.listing-description {
+  font-size: larger;
+  font-weight: 500;
+  padding: 10px; }
+
+.bold {
+  font-weight: 700; }
+
+.listing-current-bid {
+  padding: 10px 0; }
+
+.bid-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-weight: 700; }
+
+.bid-submit-button {
+  background-color: #003d89;
+  color: white;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  margin: 15px 0; }
+
+.close-auction-button {
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 10px 30px;
+  border-radius: 5px;
+  font-size: larger;
+  font-weight: 500;
+  border: none; }
+
+.listing-details {
+  margin-top: 15px; }
+
+.blue {
+  color: blue; }
+
+.comment-section-wrapper {
+  width: 100%; }
+  .comment-section-wrapper .comments-row-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+    padding: 10px; }
+    .comment-section-wrapper .comments-row-wrapper .comment-box {
+      display: flex;
+      flex-direction: row; }
+      .comment-section-wrapper .comments-row-wrapper .comment-box .profile-photo-wrapper {
+        flex-basis: 60px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: start; }
+        .comment-section-wrapper .comments-row-wrapper .comment-box .profile-photo-wrapper img {
+          margin-top: -5px;
+          width: 100%;
+          height: auto; }
+      .comment-section-wrapper .comments-row-wrapper .comment-box .comment-text-wrapper {
+        flex-grow: 1;
+        max-width: 1200px; }
+        .comment-section-wrapper .comments-row-wrapper .comment-box .comment-text-wrapper .comment-input {
+          width: 100%;
+          padding: 10px;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+          font-weight: 700;
+          height: 100px; }
+        .comment-section-wrapper .comments-row-wrapper .comment-box .comment-text-wrapper .comment-submit-button {
+          background-color: #003d89;
+          color: white;
+          cursor: pointer;
+          padding: 10px 20px;
+          border-radius: 5px;
+          border: none; }
+        .comment-section-wrapper .comments-row-wrapper .comment-box .comment-text-wrapper p {
+          margin: 0px;
+          padding: 0px; }
+        .comment-section-wrapper .comments-row-wrapper .comment-box .comment-text-wrapper .username-and-date {
+          display: flex;
+          flex-flow: row nowrap;
+          justify-content: space-between; }
+          .comment-section-wrapper .comments-row-wrapper .comment-box .comment-text-wrapper .username-and-date p:first-child {
+            font-size: larger;
+            font-weight: 500; }
+          .comment-section-wrapper .comments-row-wrapper .comment-box .comment-text-wrapper .username-and-date p:nth-child(2) {
+            font-weight: 500; }
+
+/*# sourceMappingURL=listing_page.css.map */

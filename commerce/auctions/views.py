@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import NewListingForm, AddBidForm
+from .forms import NewListingForm, AddBidForm, CommentForm
 from django.http import JsonResponse
 import json
 
@@ -111,12 +111,46 @@ def listing_page(request, listing_id):
     
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login"))
-        
+    
+    listing = AuctionListing.objects.get(pk=listing_id)
     user_id = User.objects.get(username=request.user.username).id
     product_belong_to_current_user = AuctionListing.objects.filter(seller=user_id, pk=listing_id).exists()
     found_in_watchlist = Watchlist.objects.filter(user=user_id, product=listing_id).exists()
+    bid_form = AddBidForm()
+    comment_form = CommentForm(initial={'commenter': user_id, 'product': listing_id})
+    comments = Comment.objects.filter(product=listing_id)
+    print('comments', comments )
+    
+    # The folloewong if code will define and detirmine the bid message that will appear above the bid input field
+    if Bid.objects.filter(product=listing_id).exists():  
+        
+        bid_count = Bid.objects.filter(product_id=listing_id).count()
+        
+        heighest_bidder = Bid.objects.filter(product=listing_id).order_by('-bid_amount').first().bidder
+        
+        heighest_bid = Bid.objects.filter(product=listing_id).order_by('-bid_amount').first().bid_amount
+        
+        if Bid.objects.filter(product=listing_id, bidder_id=user_id).exists():
+                    
+            current_user_heighest_bid = Bid.objects.filter(product=listing_id, bidder_id=user_id).order_by('-bid_amount').first().bid_amount
+                    
+            if current_user_heighest_bid >= heighest_bid:
+                
+                bid_msg = f"{bid_count} bid(s) so far. Your bid is the current bid"
+                
+            else:
+                        
+                bid_msg = f"{bid_count} bid(s) so far. The current bid belongs to {heighest_bidder}"
+                
+        else:
+            
+            bid_msg = f"{bid_count} bid(s) so far. The current bid belongs to {heighest_bidder}"
+    else:
+        bid_msg = "No bids yet for this listing !"
+    
     
     if request.method == "POST":
+        
         if request.POST.get('_method') == 'PUT':
             
             if not Bid.objects.filter(product=listing_id).exists():
@@ -132,95 +166,79 @@ def listing_page(request, listing_id):
         
         else:
             
-            form = AddBidForm(request.POST)   
+            if 'bid_form_submit' in request.POST:
             
-            if form.is_valid():
+                bid_form = AddBidForm(request.POST)   
                 
-                listing = AuctionListing.objects.get(pk=listing_id)
-                
-                minimum_listing_price = listing.current_bid
-                
-                bid_amount = form.cleaned_data["bid_amount"]
-                
-                if bid_amount < minimum_listing_price:
-                    form.add_error("bid_amount", "The minimum bid amount should be equal or more the current price !!") 
+                if bid_form.is_valid():
                     
-                    return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': form})
-                
-                if Bid.objects.filter(product_id=listing_id).exists():
+                    listing = AuctionListing.objects.get(pk=listing_id)
                     
-                    heighest_bid = Bid.objects.filter(product=listing_id).order_by('-bid_amount').first().bid_amount
+                    minimum_listing_price = listing.current_bid
                     
-                    if bid_amount > heighest_bid :
+                    bid_amount = bid_form.cleaned_data["bid_amount"]
+                    
+                    if bid_amount < minimum_listing_price:
+                        bid_form.add_error("bid_amount", "The minimum bid amount should be equal or more the current price !!") 
+                        
+                        return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': bid_form, 'bid_msg': bid_msg, 'comment_form': comment_form, 'comments':comments})
+                    
+                    if Bid.objects.filter(product_id=listing_id).exists():
+                        
+                        heighest_bid = Bid.objects.filter(product=listing_id).order_by('-bid_amount').first().bid_amount
+                        
+                        if bid_amount > heighest_bid :
+                            
+                            AuctionListing.objects.filter(pk=listing_id).update(current_bid=bid_amount)
+                            
+                            Bid(bidder_id=user_id, bid_amount=bid_amount, product_id=listing_id).save()
+                            
+                        return HttpResponseRedirect(reverse("listing_page", args=(listing_id,)))
+                    else:
                         
                         AuctionListing.objects.filter(pk=listing_id).update(current_bid=bid_amount)
+                                    #$#$
+                        # Here when I was inserting the bid user submitted, I used in "bidder" field in Bid(bidder), a user instance instead of just his 'id' (user_id)
                         
+                        current_user_instance = User.objects.get(username=request.user.username)
+                        
+                        Bid(bidder=current_user_instance, bid_amount=bid_amount, product=listing).save()
+                        
+                        # SO here is another method to insert data in database
+                        '''
                         Bid(bidder_id=user_id, bid_amount=bid_amount, product_id=listing_id).save()
+                        '''
+                                    #$#$
                         
+                        return HttpResponseRedirect(reverse("listing_page", args=(listing_id,)))
+                else:
+                    return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': bid_form, 'bid_msg': bid_msg, 'comment_form': comment_form, 'comments':comments})
+                
+            elif 'comment_form_submit' in request.POST:
+                
+                comment_form = CommentForm(request.POST)
+                
+                if comment_form.is_valid():
+                    
+                    comment = comment_form.save()
+                    print('comment', comment)
+                    
                     return HttpResponseRedirect(reverse("listing_page", args=(listing_id,)))
                 else:
-                    
-                    AuctionListing.objects.filter(pk=listing_id).update(current_bid=bid_amount)
-                                #$#$
-                    # Here when I was inserting the bid user submitted, I used in "bidder" field in Bid(bidder), a user instance instead of just his 'id' (user_id)
-                    
-                    current_user_instance = User.objects.get(username=request.user.username)
-                    
-                    Bid(bidder=current_user_instance, bid_amount=bid_amount, product=listing).save()
-                    
-                    # SO here is another method to insert data in database
-                    '''
-                    Bid(bidder_id=user_id, bid_amount=bid_amount, product_id=listing_id).save()
-                    '''
-                                #$#$
-                    
-                    return HttpResponseRedirect(reverse("listing_page", args=(listing_id,)))
-            else:
-                return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': form})
+                    # messages.error(request, comment_form.errors)
+                    return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': bid_form, 'bid_msg': bid_msg, 'comment_form': comment_form, 'comments':comments})
                 
     elif request.method == "GET":
-        
-        listing = AuctionListing.objects.get(pk=listing_id)
         
         if listing.sold:
             if listing.seller == listing.current_owner:
                 closed_auction_msg = f"This Auction has been closed and wasn't sold to any one !, as there were no bidders"
-                return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'closed_auction_msg': closed_auction_msg})
+                return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': AddBidForm(), 'bid_msg': bid_msg, 'comment_form': comment_form, 'closed_auction_msg': closed_auction_msg})
             else:
                 closed_auction_msg = f"This Auction has been closed and sold to {listing.current_owner}"
-                return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'closed_auction_msg': closed_auction_msg})
-        
-        if Bid.objects.filter(product=listing_id).exists():
-            
-            bid_count = Bid.objects.filter(product_id=listing_id).count()
-            
-            heighest_bidder = Bid.objects.filter(product=listing_id).order_by('-bid_amount').first().bidder
-            
-            heighest_bid = Bid.objects.filter(product=listing_id).order_by('-bid_amount').first().bid_amount
-            
-            if Bid.objects.filter(product=listing_id, bidder_id=user_id).exists():
-                        
-                current_user_heighest_bid = Bid.objects.filter(product=listing_id, bidder_id=user_id).order_by('-bid_amount').first().bid_amount
-                        
-                if current_user_heighest_bid >= heighest_bid:
-                    
-                    bid_msg = f"{bid_count} bid(s) so far. Your bid is the current bid"
-                    return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': AddBidForm(), 'bid_msg': bid_msg})
-                else:
-                            
-                    bid_msg = f"{bid_count} bid(s) so far. The current bid belongs to {heighest_bidder}"
-                    
-                    return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': AddBidForm(), 'bid_msg': bid_msg})
-            else:
-                
-                bid_msg = f"{bid_count} bid(s) so far. The current bid belongs to {heighest_bidder}"
-                
-                return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': AddBidForm(), 'bid_msg': bid_msg})
-
+                return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': AddBidForm(), 'bid_msg': bid_msg, 'comment_form': comment_form, 'closed_auction_msg': closed_auction_msg})
         else:
-            bid_msg = "No bids yet for this listing !"
-        
-        return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': AddBidForm(), 'bid_msg': bid_msg})
+            return render(request, "auctions/listing_page.html", {"listing":listing, 'found_in_watchlist': found_in_watchlist, 'product_belong_to_current_user':product_belong_to_current_user, 'bid_form': bid_form, 'bid_msg': bid_msg, 'comment_form': comment_form, 'comments':comments})
         
         
 def add_remove_to_watchlist(request):
@@ -243,3 +261,5 @@ def add_remove_to_watchlist(request):
     except Exception as e:
         error_message = f"Somthing bad happend !, please contact support error is {str(e)}"
         return JsonResponse({'status': 'error', 'error_message': error_message})
+    
+    

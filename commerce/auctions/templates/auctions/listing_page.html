@@ -16,16 +16,13 @@
     <script src={% static 'auctions/listing_page.js' %}></script>
 
     {% if listing.sold %}
-        <p>{{ closed_auction_msg }}</p>
+        <div id="tag" class="red-tag big-notifiction"><p>{{ closed_auction_msg }}</p></div>
     {%endif%}
 
     <h1 class="bold">Listing: {{ listing.title }} </h1>
 
     {% if product_belong_to_current_user %}
-
-        <div id="by-me-button">By me</div>
-
-
+        <div id="tag" class="green-tag"><p>By me</p></div>
     {% else%}
 
         {%if found_in_watchlist %}
@@ -45,66 +42,72 @@
     <h2 class="bold listing-current-bid">${{ listing.current_bid }}</h2>
 
     {% if product_belong_to_current_user and not listing.sold %}
+        <p>{{ bid_msg }}</p>
         <form method="POST" action="{% url 'listing_page' listing.id %}">
             {% csrf_token %}
             <input type="hidden" name="_method" value="PUT">
-            <button type="submit">Update</button>
+            <button type="submit" class="close-auction-button">Close This Auction</button>
         </form>
     {% elif not listing.sold %}
         <p>{{ bid_msg }}</p>
         <form method="POST" action="{% url 'listing_page' listing.id %}">
             {% csrf_token %}
             {{ bid_form }}
-            <input type="submit" value="Place Bid" class="bid-submit-button">
+            <input type="submit" name="bid_form_submit" value="Place Bid" class="bid-submit-button">
         </form>
     {% endif %}
 
     <h3 class="bold listing-details">Details</h3>
     <ul class="details-list">
         <li>Added on: {{ listing.created_at }}</li>
-        <li>Listed by:<span> {{ listing.seller }}</span></li>
+        <li>Listed by:<span class="blue"> {{ listing.seller }}</span></li>
         <li>Category: {{ listing.category }}</li>
         <li>Original Price: {{ listing.start_bid }}</li>
     </ul>
     <div class="comment-section-wrapper">
+
         <h3 class="bold">Comments</h3>
 
         <div class="comments-row-wrapper">
-            <div class="comment-box">
-                <p>
-                    Lorem Ipsum
-                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
-                </p>
-            </div>
-            <div class="comment-box">
-                <p>
-                    Lorem Ipsum
-                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
-                </p>
-            </div>
-            <div class="comment-box">
-                <p>
-                    Lorem Ipsum
-                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
-                </p>
-            </div>
-            <div class="comment-box">
-                <p>
-                    Lorem Ipsum
-                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
-                </p>
-            </div>
-            <div class="comment-box">
-                <p>
-                    Lorem Ipsum
-                    "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
-                    "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
-                </p>
-            </div>
+           
+            {% if not product_belong_to_current_user and not listing.sold %}
+                <div class="comment-box">
+                    <div class="profile-photo-wrapper">
+                        <img src="{% static 'auctions/default_profile.webp' %}">
+                    </div>
+                    <div class="comment-text-wrapper">
+                        <div class="username-and-date">
+                            <p class="commentor-username"><span class="blue">teka</span></p>
+                        </div>
+                        <form method="POST" action="{% url 'listing_page' listing.id %}">
+                            {% csrf_token %}
+                            {{ comment_form }}
+                            <input type="submit" name="comment_form_submit" value="Add" class="comment-submit-button">
+                        </form>
+                    </div>
+                </div>
+        
+            {% endif %}
+                
+            {% for comment in comments %}
+
+                <div class="comment-box">
+                    <div class="profile-photo-wrapper">
+                        <img src="{% static 'auctions/default_profile.webp' %}">
+                    </div>
+                    <div class="comment-text-wrapper">
+                        <div class="username-and-date">
+                            <p class="commentor-username"><span class="blue">{{ comment.commenter }} </span></p>
+                            <p>{{ comment.comment_date }}</p>
+                        </div>
+                        <p>
+                            {{ comment.comment }}
+                        </p>
+                    </div>
+                </div>
+
+            {% endfor %}
         </div>
+            
     </div>
 {% endblock %}
