@@ -12,7 +12,7 @@
 {% block body %}
     <h2>Categories</h2>
     
-    <ul>
+    <ul class="categories-list">
         {% for category in categories %}
             <li><a href="{% url 'listing_in_category' category %}">{{ category }}</a></li>
         {% endfor %}

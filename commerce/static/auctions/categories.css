@@ -1,6 +1,6 @@
-ul {
+ul.categories-list {
   padding: 20px; }
-  ul li {
+  ul.categories-list li {
     padding: 10px 0;
     font-size: large; }
 

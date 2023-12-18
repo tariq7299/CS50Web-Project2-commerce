@@ -1,13 +1,10 @@
-/* styles.css */
 /* Style for the container of error messages */
 ul.errorlist {
   width: 30%;
   list-style: none;
   margin: 10px 0;
   border: 1px solid #f00;
-  /* Border color for error messages */
   background-color: #fee;
-  /* Background color for error messages */
   border-radius: 5px;
   margin-bottom: 5px; }
   ul.errorlist li {

@@ -12,7 +12,6 @@
 
 {% block body %}
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src={% static 'auctions/listing_page.js' %}></script>
 
     {% if listing.sold %}
@@ -88,25 +87,29 @@
                 </div>
         
             {% endif %}
-                
-            {% for comment in comments %}
+            {% if not comments %}
+                <p>There not yet any comments on this listing !</p>
+            {% else %}
+                {% for comment in comments %}
 
-                <div class="comment-box">
-                    <div class="profile-photo-wrapper">
-                        <img src="{% static 'auctions/default_profile.webp' %}">
-                    </div>
-                    <div class="comment-text-wrapper">
-                        <div class="username-and-date">
-                            <p class="commentor-username"><span class="blue">{{ comment.commenter }} </span></p>
-                            <p>{{ comment.comment_date }}</p>
+                    <div class="comment-box">
+                        <div class="profile-photo-wrapper">
+                            <img src="{% static 'auctions/default_profile.webp' %}">
                         </div>
-                        <p>
-                            {{ comment.comment }}
-                        </p>
+                        <div class="comment-text-wrapper">
+                            <div class="username-and-date">
+                                <p class="commentor-username"><span class="blue">{{ comment.commenter }} </span></p>
+                                <p>{{ comment.comment_date }}</p>
+                            </div>
+                            <p>
+                                {{ comment.comment }}
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
+
         </div>
             
     </div>

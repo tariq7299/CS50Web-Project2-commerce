@@ -18,7 +18,7 @@ class AddBidForm(forms.Form):
         widget=forms.NumberInput(attrs={'placeholder': 'Bid', 'class': 'bid-input'})
     )
     
-    
+# Here I tried to inherit from forms.ModelForm instead of forms.Form to just test it and also be able to try ad many ways as possible !! in order to learn more
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -31,16 +31,3 @@ class CommentForm(forms.ModelForm):
         labels = {
             'comment': '',
         }
-        
-        def clean(self):
-            cleaned_data = super().clean()
-            comment = cleaned_data.get('comment')
-
-            # Add your constraints here
-            if len(comment) < 10:
-                raise forms.ValidationError(
-                    "Your comment must be at least 10 characters long."
-                )
-
-            # Always return cleaned_data
-            return cleaned_data

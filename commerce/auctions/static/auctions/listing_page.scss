@@ -1,6 +1,5 @@
 
 
-/* styles.css */
 
 /* Style for the container of error messages */
 ul.errorlist {
@@ -8,19 +7,17 @@ ul.errorlist {
     list-style: none;
     // padding: 6px;
     margin: 10px 0;
-    border: 1px solid #f00; /* Border color for error messages */
-    background-color: #fee; /* Background color for error messages */
+    border: 1px solid #f00; 
+    background-color: #fee; 
     border-radius: 5px;
     margin-bottom: 5px;
     li {
         padding: 5px;
         color: #f00;
     }
-
 }
 
 #tag {
-
     padding: 0 5px;
     color: white;
     width: fit-content;
@@ -121,10 +118,6 @@ ul.errorlist {
     border-radius: 5px;
     font-size: larger;
     font-weight: 500;
-
-
-
-
     border: none;
 }
 

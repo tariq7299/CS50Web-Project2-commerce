@@ -2,7 +2,7 @@
 {% load sass_tags %}
 
 {% block title %}
-    Active Listing
+    {{ category }}
 {% endblock %}
 
 {% block scss %}
@@ -10,7 +10,8 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>Active Listings in: <b class="blue">{{ category }}</b></h2>
+
     {% if not listings_in_category %}
         No listings Added in this category ! Maybe come back later.
     {% else %}
